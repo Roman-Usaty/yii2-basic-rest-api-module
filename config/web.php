@@ -1,6 +1,7 @@
 <?php
 
 use app\models\User;
+use app\modules\v1\RestApi;
 
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
@@ -61,7 +62,10 @@ $config = [
             'showScriptName' => false,
             'rules' => [
                  '' => 'patientss/index',
-                ['class' => 'yii\rest\UrlRule', 'controller' => 'api/test'],
+                [
+                    'class' => yii\rest\UrlRule::class,
+                    'controller' => 'v1/patients',
+                ],
             ],
         ],
         
@@ -88,8 +92,8 @@ $config = [
                     };
                 },
         ],
-        'api' => [
-            'class' => 'app\api\RestApi',
+        'v1' => [
+            'class' => 'app\modules\v1\RestApi',
         ]
     ],    
     'params' => $params,
