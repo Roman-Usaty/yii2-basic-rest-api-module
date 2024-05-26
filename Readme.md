@@ -1,6 +1,6 @@
-This is RestApi module for yii2 basic application.
-
-Small documentation for Rest API.
+<h1>This is RestApi module for yii2 basic application.</h1>
+Small documentation for Rest API.<br>
+All returned value encoded in json
 
 Basic url: domain/v1/site.<br>
 Allowed method: GET<br>
@@ -38,6 +38,13 @@ POST<br>
     source_id:       int     User ID from whom the patient was infected
 }
 </pre>
+Return:
+<pre>
+{
+    patientId: int ID of the created patient
+}
+</pre>
+
 GET - query search params<br>
 example: ?name=`<value>`&phone=`<value>`
 <pre>
@@ -50,5 +57,13 @@ example: ?name=`<value>`&phone=`<value>`
     form_disease_id: int     Id of the course of the disease
 }
 </pre>
+Return:
+<pre>
+{
+    count: int   Count of founded row
+    data:  array Array of patient objects
+}
+</pre>
+
 OPTIONS<br>
 Return allowed method in header field
