@@ -1,8 +1,5 @@
 <?php
 
-use app\models\User;
-use app\modules\v1\RestApi;
-
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
 
@@ -61,7 +58,11 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                 '' => 'patientss/index',
+                '' => 'patientss/index',
+                [
+                    'class' => yii\rest\UrlRule::class,
+                    'controller' => 'v1/site',
+                ],
                 [
                     'class' => yii\rest\UrlRule::class,
                     'controller' => 'v1/patients',
@@ -93,7 +94,7 @@ $config = [
                 },
         ],
         'v1' => [
-            'class' => 'app\modules\v1\RestApi',
+            'class' => app\modules\api\v1\RestApi::class,
         ]
     ],    
     'params' => $params,

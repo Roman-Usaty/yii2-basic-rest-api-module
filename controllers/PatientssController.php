@@ -79,8 +79,6 @@ class PatientssController extends BaseController
         $user = User::findOne(Yii::$app->user->id);
 
         if ($model->load(Yii::$app->request->post())) {
-            $model->created = date("Y-m-d H:i:s");
-            $model->updated = date("Y-m-d H:i:s");
             $model->created_by = \Yii::$app->user->id;
             $model->updated_by = \Yii::$app->user->id;
             $model->birthday = $model->birthday  ? date("Y-m-d", strtotime($model->birthday)) : null;

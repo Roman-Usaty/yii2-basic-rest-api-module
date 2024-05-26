@@ -431,4 +431,9 @@ class User extends \webvimark\modules\UserManagement\models\User
 
         return parent::beforeDelete();
     }
+
+    public static function findIdentityByAccessToken($token, $type = null)
+    {
+        return self::findOne(['auth_key' => $token, 'status' => static::STATUS_ACTIVE]);
+    }
 }

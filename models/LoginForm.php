@@ -2,8 +2,12 @@
 
 namespace app\models;
 
+use Throwable;
 use Yii;
+use yii\base\Exception;
 use yii\base\Model;
+use yii\db\StaleObjectException;
+use yii\helpers\VarDumper;
 
 /**
  * LoginForm is the model behind the login form.
@@ -66,6 +70,26 @@ class LoginForm extends Model
     }
 
     /**
+     * Метод аутентификация пользователя для Rest API
+     *
+     * @return string|void - строка auth_key или null если данные не верны
+     * @throws Throwable
+     * @throws Exception
+     * @throws StaleObjectException
+     */
+    public function auth() {
+        if ($this->validate()) {
+            $token = Yii::$app->security->generateRandomString();
+            if ($this->_user->updateAttributes(['auth_key' => $token])) {
+                return $token;
+            } else {
+                return null;
+            }
+        }
+        return null;
+    }
+
+    /**
      * Finds user by [[username]]
      *
      * @return User|null
@@ -77,5 +101,23 @@ class LoginForm extends Model
         }
 
         return $this->_user;
+    }
+
+    /**
+     * Возвращает ошибки валидации в строке
+     *
+     * @return string|null
+     */
+    public function getReadableErrors()
+    {
+        $error_message = '';
+
+        if (!empty($this->errors)) {
+            foreach ($this->errors as $attribute => $error) {
+                $error_message .= $attribute . ': ' . implode(', ', $error) . ' ';
+            }
+            return $error_message;
+        }
+        return null;
     }
 }

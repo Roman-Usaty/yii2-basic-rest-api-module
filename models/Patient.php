@@ -2,7 +2,8 @@
 
 namespace app\models;
 
-use Yii;
+use yii\behaviors\BlameableBehavior;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "patients".
@@ -55,13 +56,13 @@ class Patient extends \yii\db\ActiveRecord
             [['name'], 'string', 'max' => 255],
             [['phone'], 'string', 'max' => 50],
             [['address'], 'string', 'max' => 512],
-            [['form_disease_id'], 'exist', 'skipOnError' => true, 'targetClass' => FormDiseases::className(), 'targetAttribute' => ['form_disease_id' => 'id']],
-            [['source_id'], 'exist', 'skipOnError' => true, 'targetClass' => Patient::className(), 'targetAttribute' => ['source_id' => 'id']],
-            [['polyclinic_id'], 'exist', 'skipOnError' => true, 'targetClass' => Polyclinics::className(), 'targetAttribute' => ['polyclinic_id' => 'id']],
-            [['status_id'], 'exist', 'skipOnError' => true, 'targetClass' => Statuses::className(), 'targetAttribute' => ['status_id' => 'id']],
-            [['treatment_id'], 'exist', 'skipOnError' => true, 'targetClass' => Treatments::className(), 'targetAttribute' => ['treatment_id' => 'id']],
-            [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],
-            [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['updated_by' => 'id']],
+            [['form_disease_id'], 'exist', 'skipOnError' => true, 'targetClass' => FormDiseases::class, 'targetAttribute' => ['form_disease_id' => 'id']],
+            [['source_id'], 'exist', 'skipOnError' => true, 'targetClass' => Patient::class, 'targetAttribute' => ['source_id' => 'id']],
+            [['polyclinic_id'], 'exist', 'skipOnError' => true, 'targetClass' => Polyclinics::class, 'targetAttribute' => ['polyclinic_id' => 'id']],
+            [['status_id'], 'exist', 'skipOnError' => true, 'targetClass' => Statuses::class, 'targetAttribute' => ['status_id' => 'id']],
+            [['treatment_id'], 'exist', 'skipOnError' => true, 'targetClass' => Treatments::class, 'targetAttribute' => ['treatment_id' => 'id']],
+            [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['created_by' => 'id']],
+            [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['updated_by' => 'id']],
         ];
     }
 
@@ -83,12 +84,45 @@ class Patient extends \yii\db\ActiveRecord
             'created' => 'Создана',
             'created_by' => 'Создана',
             'updated' => 'Изменена',
-            'updated_by' => 'Измененв',
+            'updated_by' => 'Изменена',
             'diagnosis_date' => 'Диагноз',
             'recovery_date' => 'Выздоровление',
             'analysis_date' => 'Анализ',
             'source_id' => 'От кого заразился',
         ];
+    }
+
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::class,
+                'createdAtAttribute' => 'created',
+                'updatedAtAttribute' => 'updated',
+                'value' => date('Y-m-d H:i:s'),
+            ],
+            [
+                'class' => BlameableBehavior::class,
+                'defaultValue' => -1,
+            ]
+        ];
+    }
+
+    public function beforeSave($insert)
+    {
+        $dateAttribute = [
+            'birthday',
+            'diagnosis_date',
+            'recovery_date',
+            'analysis_date'
+        ];
+
+        foreach ($dateAttribute as $attribute) {
+            if (!empty($this->$attribute) && $unixTime = strtotime($this->$attribute)) {
+                $this->$attribute = date('Y-m-d', $unixTime);
+            }
+        }
+        return parent::beforeSave($insert);
     }
 
     /**
@@ -169,5 +203,23 @@ class Patient extends \yii\db\ActiveRecord
     public function getUpdatedBy()
     {
         return $this->hasOne(User::className(), ['id' => 'updated_by']);
+    }
+
+    /**
+     * Возвращает ошибки валидации в строке
+     *
+     * @return string|null
+     */
+    public function getReadableErrors()
+    {
+        $error_message = '';
+
+        if (!empty($this->errors)) {
+            foreach ($this->errors as $attribute => $error) {
+                $error_message .= $attribute . ': ' . implode(', ', $error) . ' ';
+            }
+            return $error_message;
+        }
+        return null;
     }
 }

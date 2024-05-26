@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\v1;
+namespace app\modules\api\v1;
 
 use Yii;
 use yii\base\Module;
