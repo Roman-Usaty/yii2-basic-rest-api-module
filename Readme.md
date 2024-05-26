@@ -19,7 +19,7 @@ Return: string Token for authentication must used like
 Bearer or Username (in basic auth)
 
 Url: domain/v1/patients<br>
-Allowed method: POST, GET<br>
+Allowed method: POST, GET, OPTIONS<br>
 Required body params:<br>
 POST<br>
 <pre>
@@ -50,3 +50,5 @@ example: ?name=`<value>`&phone=`<value>`
     form_disease_id: int     Id of the course of the disease
 }
 </pre>
+OPTIONS<br>
+Return allowed method in header field

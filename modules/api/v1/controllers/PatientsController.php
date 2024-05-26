@@ -18,6 +18,7 @@ use yii\web\ServerErrorHttpException;
 
 class PatientsController extends Controller
 {
+    private $_verbs = ['POST','OPTIONS', 'GET'];
     public function behaviors(): array
     {
         $behaviors = parent::behaviors();
@@ -89,5 +90,14 @@ class PatientsController extends Controller
             throw new BadRequestHttpException($patient->getReadableErrors());
         }
         throw new ForbiddenHttpException('You are not allowed to access this page');
+    }
+
+    public function actionOptions()
+    {
+        if (Yii::$app->getRequest()->getMethod() !== 'OPTIONS') {
+            Yii::$app->getResponse()->setStatusCode(405);
+        }
+        $options = $this->_verbs;
+        Yii::$app->getResponse()->getHeaders()->set('Allow', implode(', ', $options));
     }
 }
