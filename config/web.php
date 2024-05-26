@@ -66,6 +66,7 @@ $config = [
                 [
                     'class' => yii\rest\UrlRule::class,
                     'controller' => 'v1/patients',
+                    'only' => ['index', 'create'],
                 ],
             ],
         ],

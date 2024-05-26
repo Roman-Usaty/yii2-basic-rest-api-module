@@ -54,7 +54,7 @@ class PatientSearch  extends Patient
             ]
         );
 
-        return $this->getDataProvider($query, $params);
+        return $this->getDataProvider($query, $params, '');
     }
 
     /**
@@ -62,9 +62,11 @@ class PatientSearch  extends Patient
      *
      * @param ActiveQuery $query
      * @param $params
+     * @param string|null $formName
+     *
      * @return ActiveDataProvider
      */
-    private function getDataProvider(ActiveQuery $query, $params): ActiveDataProvider
+    private function getDataProvider(ActiveQuery $query, $params, string $formName = null): ActiveDataProvider
     {
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -78,7 +80,7 @@ class PatientSearch  extends Patient
             ],
         ]);
 
-        if (!($this->load($params) && $this->validate())) {
+        if (!($this->load($params, $formName) && $this->validate())) {
             return $dataProvider;
         }
 
