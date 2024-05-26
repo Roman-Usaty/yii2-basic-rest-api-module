@@ -63,6 +63,20 @@ Return:
     count: int   Count of founded row
     data:  array Array of patient objects
 }
+example data element
+{
+    id:              int    Patients ID
+    name:            string Patients full name
+    birthday:        string A valid date string
+    phone:           string A valid phone number string
+    polyclinic_id:   int    Id of existing polyclynics
+    status_id:       int    The status of patients
+    treatment_id:    int    Id of the treatment form
+    form_disease_id: int    Id of the course of the disease
+    updated:         string A valid date string
+    diagnosis_date:  string A valid date string
+    recovery_date:   string A valid date string
+}
 </pre>
 
 OPTIONS<br>
