@@ -36,6 +36,9 @@ class PatientsController extends Controller
             'class' => ContentNegotiator::class,
             'formats' => [
                 'application/json' => Response::FORMAT_JSON,
+            ],
+            'acceptParams' => [
+                'version' => '1.0'
             ]
         ];
         return $behaviors;
