@@ -1,6 +1,6 @@
 <h1>This is RestApi module for yii2 basic application.</h1>
 Small documentation for Rest API.<br>
-All returned value encoded in json
+All returned value encoded in json<br>
 
 Basic url: domain/v1/site.<br>
 Allowed method: GET<br>
