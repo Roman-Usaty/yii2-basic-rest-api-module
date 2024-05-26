@@ -31,9 +31,6 @@ class SiteController extends Controller
             'formats' => [
                 'application/json' => Response::FORMAT_JSON,
             ],
-            'acceptParams' => [
-                'version' => '1.0'
-            ]
         ];
         return $behaviors;
     }
